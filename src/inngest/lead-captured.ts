@@ -1,4 +1,6 @@
 import { inngest } from '@/lib/inngest';
+import { Resend } from 'resend';
+import { NewLeadEmail } from '@/emails/new-lead';
 
 // Event type for lead capture
 export interface LeadCapturedEvent {
@@ -39,7 +41,20 @@ export const leadCaptured = inngest.createFunction(
       });
     }
 
-    // Step 2: Send email notification (placeholder — wired in Task 3)
+    // Step 2: Send email notification
+    const resendApiKey = process.env.RESEND_API_KEY;
+    if (resendApiKey) {
+      await step.run('send-email-notification', async () => {
+        const resend = new Resend(resendApiKey);
+        const { error } = await resend.emails.send({
+          from: process.env.EMAIL_FROM || 'Melissa <leads@updates.munka.dev>',
+          to: process.env.EMAIL_TO?.split(',') || [],
+          subject: `New Lead: ${event.data.firstName}, ${event.data.age}, ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(event.data.coverageAmount)}`,
+          react: NewLeadEmail(event.data),
+        });
+        if (error) throw new Error(`Email failed: ${error.message}`);
+      });
+    }
 
     // Step 3: Send Slack notification (placeholder — wired in Task 4)
 
