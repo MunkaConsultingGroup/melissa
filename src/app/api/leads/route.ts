@@ -64,6 +64,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ id: lead.id, success: true });
   } catch (error) {
     console.error('Lead creation failed:', error);
-    return NextResponse.json({ error: 'Failed to save lead' }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: 'Failed to save lead', detail: message }, { status: 500 });
   }
 }
