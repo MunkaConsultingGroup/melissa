@@ -28,6 +28,7 @@ export default function ChatWindow() {
   const [stepsCompleted, setStepsCompleted] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const hasInitialized = useRef(false);
+  const utmParams = useRef<Record<string, string>>({});
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -36,6 +37,20 @@ export default function ChatWindow() {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
+
+  // Capture UTM params on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'gclid', 'fbclid'];
+      utmKeys.forEach((key) => {
+        const val = params.get(key);
+        if (val) utmParams.current[key] = val;
+      });
+      utmParams.current.referrer = document.referrer || '';
+      utmParams.current.landingPage = window.location.pathname;
+    }
+  }, []);
 
   const addBotMessage = useCallback(
     (text: string, step?: (typeof conversationSteps)[0], ratesData?: CarrierQuote[]) => {
@@ -171,6 +186,15 @@ export default function ChatWindow() {
           consentGiven: true,
           consentText: currentAnswers.consent_text || '',
           ipAddress: '',
+          utmSource: utmParams.current.utm_source,
+          utmMedium: utmParams.current.utm_medium,
+          utmCampaign: utmParams.current.utm_campaign,
+          utmContent: utmParams.current.utm_content,
+          utmTerm: utmParams.current.utm_term,
+          gclid: utmParams.current.gclid,
+          fbclid: utmParams.current.fbclid,
+          referrer: utmParams.current.referrer,
+          landingPage: utmParams.current.landingPage,
         }),
       });
     } catch {

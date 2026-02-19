@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { inngest } from '@/lib/inngest';
 import { LeadData } from '@/lib/types';
 
 export async function POST(request: NextRequest) {
@@ -28,26 +29,37 @@ export async function POST(request: NextRequest) {
         consentText: body.consentText,
         consentAt: new Date(),
         ipAddress,
+        // UTM tracking
+        utmSource: body.utmSource || null,
+        utmMedium: body.utmMedium || null,
+        utmCampaign: body.utmCampaign || null,
+        utmContent: body.utmContent || null,
+        utmTerm: body.utmTerm || null,
+        gclid: body.gclid || null,
+        fbclid: body.fbclid || null,
+        referrer: body.referrer || null,
+        landingPage: body.landingPage || null,
       },
     });
 
-    // Fire webhook if configured
-    const webhookUrl = process.env.WEBHOOK_URL;
-    if (webhookUrl) {
-      try {
-        await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ leadId: lead.id, ...body }),
-        });
-        await prisma.lead.update({
-          where: { id: lead.id },
-          data: { webhookSent: true, webhookSentAt: new Date() },
-        });
-      } catch {
-        console.error('Webhook delivery failed');
-      }
-    }
+    // Fire Inngest event — handles webhook, email, Slack with retries
+    await inngest.send({
+      name: 'lead/captured',
+      data: {
+        leadId: lead.id,
+        firstName: body.firstName,
+        email: body.email,
+        phone: body.phone,
+        zip: body.zip,
+        age: body.age,
+        gender: body.gender,
+        smokerStatus: body.smokerStatus,
+        healthClass: body.healthClass,
+        coverageAmount: body.coverageAmount,
+        termLength: body.termLength,
+        ratesShown: JSON.stringify(body.ratesShown),
+      },
+    });
 
     return NextResponse.json({ id: lead.id, success: true });
   } catch (error) {

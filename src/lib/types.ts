@@ -75,4 +75,15 @@ export interface LeadData {
   consentGiven: boolean;
   consentText: string;
   ipAddress: string;
+
+  // UTM tracking
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  gclid?: string;
+  fbclid?: string;
+  referrer?: string;
+  landingPage?: string;
 }
