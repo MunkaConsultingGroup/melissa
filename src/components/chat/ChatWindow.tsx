@@ -277,7 +277,7 @@ export default function ChatWindow() {
     <div className="flex flex-col h-full bg-white">
       <ProgressBar current={stepsCompleted} total={TOTAL_STEPS} />
 
-      <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col justify-end">
+      <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col justify-start">
         <div className="w-full max-w-lg mx-auto">
           {messages.map((msg) => (
             <div key={msg.id}>

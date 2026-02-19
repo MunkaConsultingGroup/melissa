@@ -18,9 +18,11 @@ export default function MessageBubble({ sender, text }: MessageBubbleProps) {
       className={`flex ${isBot ? 'justify-start' : 'justify-end'} mb-3`}
     >
       {isBot && (
-        <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-white text-sm font-semibold mr-2 flex-shrink-0 mt-1">
-          M
-        </div>
+        <img
+          src="/melissa-avatar.jpg"
+          alt="Melissa"
+          className="w-8 h-8 rounded-full mr-2 flex-shrink-0 mt-1 object-cover"
+        />
       )}
       <div
         className={`max-w-[80%] px-4 py-3 rounded-2xl text-[15px] leading-relaxed ${

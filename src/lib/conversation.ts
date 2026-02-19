@@ -3,7 +3,7 @@ import { ConversationStep, ConversationAnswers, ConversationOption } from './typ
 export const conversationSteps: ConversationStep[] = [
   {
     id: 'welcome',
-    message: "Hi! I'm Melissa, and I'm here to help you find the right life insurance. This takes about 2 minutes \u2014 no spam, no pressure. Ready?",
+    message: "Hi! I'm Melissa. I help dads like you find affordable life insurance so your family is always protected. This takes about 2 minutes \u2014 no spam, no pressure. Ready?",
     inputType: 'options',
     options: [
       { label: "Let's do it", value: 'yes' },
@@ -13,7 +13,7 @@ export const conversationSteps: ConversationStep[] = [
   },
   {
     id: 'explainer',
-    message: "I'll ask you a few simple questions about yourself, then show you estimated rates from top-rated carriers. If you like what you see, I can connect you with a licensed agent who can lock in your exact rate. Your info stays private until you say otherwise.",
+    message: "I'll ask a few quick questions, then show you estimated rates from top-rated carriers. Most dads are surprised how affordable it is. If you like what you see, a licensed agent can lock in your exact rate. Your info stays private until you say otherwise.",
     inputType: 'options',
     options: [{ label: 'Sounds good', value: 'ok' }],
     next: 'age',
@@ -108,13 +108,13 @@ export const conversationSteps: ConversationStep[] = [
   },
   {
     id: 'rates_display',
-    message: "Here's what I found based on your profile. These are estimated monthly rates from top-rated carriers:",
+    message: "Here's what I found for you. These are estimated monthly rates from top-rated carriers \u2014 that's the cost of keeping your family protected:",
     inputType: 'rates_display',
     next: 'lead_intro',
   },
   {
     id: 'lead_intro',
-    message: "Want to get your exact rate? I can connect you with a licensed agent who will confirm your price and help you apply \u2014 no obligation.",
+    message: "Want to lock in your exact rate? A licensed agent will confirm your price and help you get covered \u2014 so your kids and family are always taken care of. No obligation.",
     inputType: 'options',
     options: [
       { label: 'Yes, connect me', value: 'yes' },
@@ -124,7 +124,7 @@ export const conversationSteps: ConversationStep[] = [
   },
   {
     id: 'soft_decline',
-    message: "No problem at all! Your estimated rates are saved. If you change your mind, you can come back anytime. Have a great day!",
+    message: "No problem at all! Your estimated rates are saved. When you're ready to protect your family, just come back anytime.",
     inputType: 'auto',
     next: 'done',
   },
@@ -186,7 +186,7 @@ export const conversationSteps: ConversationStep[] = [
   {
     id: 'confirmation',
     message: (answers) =>
-      `You're all set, ${answers.name || 'there'}! A licensed agent will reach out within 24 hours to confirm your rates. They'll have your profile, so you won't need to repeat anything. Thanks for trusting Melissa!`,
+      `You're all set, ${answers.name || 'there'}! A licensed agent will reach out within 24 hours to confirm your rates and help get your family covered. They'll have your profile, so you won't need to repeat anything. Your family is in good hands.`,
     inputType: 'auto',
     next: 'done',
   },

@@ -11,10 +11,10 @@ export default function Home() {
       {/* Hero */}
       <section className="min-h-svh flex flex-col items-center justify-center px-6 py-16 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-5 leading-tight">
-          Life insurance that<br />makes sense.
+          Your family is counting<br />on you, Dad.
         </h1>
         <p className="text-base sm:text-lg text-gray-600 mb-8 max-w-md mx-auto">
-          Get your personalized estimate in under 2 minutes.
+          See what term life insurance actually costs in under 2&nbsp;minutes.
           No spam, no sales calls until you&apos;re ready.
         </p>
         <button
@@ -35,9 +35,9 @@ export default function Home() {
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 text-center mb-10">How it works</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           {[
-            { step: '1', title: 'Answer a few questions', desc: 'Melissa asks about your age, health, and coverage needs. Takes about 2 minutes.' },
-            { step: '2', title: 'See your rates', desc: 'Get estimated monthly rates from top-rated carriers, personalized to your profile.' },
-            { step: '3', title: 'Connect with an agent', desc: 'If you like what you see, a licensed agent confirms your exact rate. No obligation.' },
+            { step: '1', title: 'Answer a few questions', desc: 'Melissa asks about your age, health, and what your family needs. Takes about 2 minutes.' },
+            { step: '2', title: 'See your rates', desc: 'Get estimated monthly rates from top-rated carriers — most dads pay less than they think.' },
+            { step: '3', title: 'Connect with an agent', desc: 'A licensed agent locks in your exact rate. No obligation, no pressure.' },
           ].map((item) => (
             <div key={item.step} className="text-center">
               <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center mx-auto mb-4">
