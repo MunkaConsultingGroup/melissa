@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { conversationSteps, getStepById, getNextStep } from '@/lib/conversation';
 import { ChatMessage, ConversationAnswers, ConversationOption, CarrierQuote } from '@/lib/types';
 import MessageBubble from './MessageBubble';
@@ -116,7 +116,6 @@ export default function ChatWindow() {
           addBotMessage('I had trouble looking up rates. Let me connect you with an agent who can help directly.', step, []);
         }
         setCurrentStepId(stepId);
-        // Auto-advance after showing rates
         await new Promise((r) => setTimeout(r, 1500));
         const nextId = getNextStep(stepId, currentAnswers, '');
         processStep(nextId, currentAnswers);
@@ -126,7 +125,6 @@ export default function ChatWindow() {
       // Handle auto-advance steps
       if (step.inputType === 'auto') {
         addBotMessage(messageText);
-        // If this is the submitting step, actually submit
         if (stepId === 'submitting') {
           await submitLead(currentAnswers);
         }
@@ -202,35 +200,30 @@ export default function ChatWindow() {
     }
   };
 
-  // Handle inline option selection (Lemonade-style)
+  // Inline option selection
   const handleInlineSelect = (msgId: string, value: string, label: string) => {
     if (inputDisabled) return;
-
     setInputDisabled(true);
 
-    // Mark the selected option on the message
     setMessages((prev) =>
       prev.map((m) =>
         m.id === msgId ? { ...m, selectedValue: value, selectedLabel: label } : m
       )
     );
 
-    // Store answer
     const newAnswers = { ...answers, [currentStepId]: value };
     setAnswers(newAnswers);
     setStepsCompleted((prev) => prev + 1);
 
-    // Process next step
     const nextId = getNextStep(currentStepId, newAnswers, value);
     setTimeout(() => processStep(nextId, newAnswers), 400);
   };
 
-  // Handle text input responses (bottom bar)
-  const handleUserResponse = (value: string, displayText?: string) => {
+  // Inline text input submission
+  const handleInlineTextSubmit = (msgId: string, value: string) => {
     const step = getStepById(currentStepId);
     if (!step || inputDisabled) return;
 
-    // Validate
     if (step.validation) {
       const error = step.validation(value, answers);
       if (error) {
@@ -241,58 +234,53 @@ export default function ChatWindow() {
 
     setInputDisabled(true);
 
-    // Add user message bubble for text inputs
-    const userMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
-      sender: 'user',
-      text: displayText || value,
-      timestamp: Date.now(),
-    };
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === msgId ? { ...m, selectedValue: value, selectedLabel: value } : m
+      )
+    );
 
-    // Store answer
     const newAnswers = { ...answers, [currentStepId]: value };
     setAnswers(newAnswers);
     setStepsCompleted((prev) => prev + 1);
 
-    // Process next step
     const nextId = getNextStep(currentStepId, newAnswers, value);
     setTimeout(() => processStep(nextId, newAnswers), 300);
   };
 
-  const handleConsent = (consented: boolean, text: string) => {
+  // Inline consent submission
+  const handleInlineConsent = (msgId: string, consented: boolean, text: string) => {
     if (!consented) return;
+    setInputDisabled(true);
+
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === msgId ? { ...m, selectedValue: 'true', selectedLabel: 'I agree' } : m
+      )
+    );
+
     const newAnswers = { ...answers, consent: 'true', consent_text: text };
     setAnswers(newAnswers);
     setStepsCompleted((prev) => prev + 1);
-    setInputDisabled(true);
-
-    const userMsg: ChatMessage = {
-      id: `user-${Date.now()}`,
-      sender: 'user',
-      text: 'I agree',
-      timestamp: Date.now(),
-    };
-    setMessages((prev) => [...prev, userMsg]);
 
     const nextId = getNextStep(currentStepId, newAnswers, 'true');
     setTimeout(() => processStep(nextId, newAnswers), 300);
   };
-
-  // Only show bottom bar for text inputs and consent (not options)
-  const currentStep = getStepById(currentStepId);
-  const showTextInput =
-    currentStep &&
-    ['text', 'number', 'email', 'phone'].includes(currentStep.inputType) &&
-    !inputDisabled;
-  const showConsent = currentStep?.inputType === 'consent' && !inputDisabled;
-  const showBottomBar = !conversationDone && (showTextInput || showConsent);
 
   const inputTypeMap: Record<string, 'text' | 'number' | 'email' | 'tel'> = {
     text: 'text',
     number: 'number',
     email: 'email',
     phone: 'tel',
+  };
+
+  const getPlaceholder = (inputType: string) => {
+    switch (inputType) {
+      case 'number': return 'Enter your age...';
+      case 'email': return 'your@email.com';
+      case 'phone': return '(555) 123-4567';
+      default: return 'Type here...';
+    }
   };
 
   return (
@@ -303,14 +291,14 @@ export default function ChatWindow() {
         {/* Top scroll fade */}
         <div className="pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white to-transparent z-10" />
 
-        <div className="h-full overflow-y-auto px-4 py-6 flex flex-col justify-start">
+        <div className="h-full overflow-y-auto px-4 py-6 pb-[env(safe-area-inset-bottom,24px)] flex flex-col justify-start">
           <div className="w-full max-w-lg mx-auto">
             {messages.map((msg) => (
               <div key={msg.id}>
                 <MessageBubble sender={msg.sender} text={msg.text} />
                 {msg.rates && msg.rates.length > 0 && <RateCard quotes={msg.rates} />}
 
-                {/* Inline options — Lemonade style */}
+                {/* Inline options */}
                 {msg.options && msg.inputType === 'options' && (
                   <div className="ml-10">
                     <OptionButtons
@@ -318,6 +306,54 @@ export default function ChatWindow() {
                       onSelect={(value, label) => handleInlineSelect(msg.id, value, label)}
                       selectedValue={msg.selectedValue}
                     />
+                  </div>
+                )}
+
+                {/* Inline text/number/email/phone input */}
+                {msg.inputType && ['text', 'number', 'email', 'phone'].includes(msg.inputType) && (
+                  <div className="ml-10">
+                    {msg.selectedValue ? (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.25 }}
+                        className="flex justify-end mb-4 mt-1"
+                      >
+                        <div className="px-4 py-2.5 rounded-2xl bg-slate-700 text-white text-[14px] font-medium rounded-br-md">
+                          {msg.selectedLabel}
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <div className="mt-2 mb-4">
+                        <TextInput
+                          type={inputTypeMap[msg.inputType] || 'text'}
+                          placeholder={getPlaceholder(msg.inputType)}
+                          onSubmit={(value) => handleInlineTextSubmit(msg.id, value)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Inline consent */}
+                {msg.inputType === 'consent' && (
+                  <div className="ml-10">
+                    {msg.selectedValue ? (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.25 }}
+                        className="flex justify-end mb-4 mt-1"
+                      >
+                        <div className="px-4 py-2.5 rounded-2xl bg-slate-700 text-white text-[14px] font-medium rounded-br-md">
+                          I agree
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <div className="mt-2 mb-4">
+                        <ConsentCheckbox onConsent={(consented, text) => handleInlineConsent(msg.id, consented, text)} />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -329,30 +365,6 @@ export default function ChatWindow() {
           </div>
         </div>
       </div>
-
-      {showBottomBar && (
-        <div className="border-t border-gray-100 px-4 py-4 pb-[env(safe-area-inset-bottom,16px)]">
-          <div className="w-full max-w-lg mx-auto">
-            {showTextInput && currentStep && (
-              <TextInput
-                type={inputTypeMap[currentStep.inputType] || 'text'}
-                placeholder={
-                  currentStep.inputType === 'number'
-                    ? 'Enter your age...'
-                    : currentStep.inputType === 'email'
-                    ? 'your@email.com'
-                    : currentStep.inputType === 'phone'
-                    ? '(555) 123-4567'
-                    : 'Type here...'
-                }
-                onSubmit={(value) => handleUserResponse(value)}
-              />
-            )}
-
-            {showConsent && <ConsentCheckbox onConsent={handleConsent} />}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -15,7 +15,6 @@ export default function TextInput({ type = 'text', placeholder = 'Type here...',
   const handleSubmit = () => {
     if (value.trim()) {
       onSubmit(value.trim());
-      setValue('');
     }
   };
 

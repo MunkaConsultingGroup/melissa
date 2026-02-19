@@ -6,8 +6,8 @@ export const conversationSteps: ConversationStep[] = [
     message: "Hi! I'm Melissa. I help dads like you find affordable life insurance so your family is always protected. This takes about 2 minutes \u2014 no spam, no pressure. Ready?",
     inputType: 'options',
     options: [
-      { label: "Let's do it", value: 'yes', icon: 'rocket' },
-      { label: 'Tell me more first', value: 'more', icon: 'info' },
+      { label: "Let's do it", value: 'yes' },
+      { label: 'Tell me more first', value: 'more' },
     ],
     next: (_answers, value) => (value === 'more' ? 'explainer' : 'age'),
   },
@@ -15,7 +15,7 @@ export const conversationSteps: ConversationStep[] = [
     id: 'explainer',
     message: "I'll ask a few quick questions, then show you estimated rates from top-rated carriers. Most dads are surprised how affordable it is. If you like what you see, a licensed agent can lock in your exact rate. Your info stays private until you say otherwise.",
     inputType: 'options',
-    options: [{ label: 'Sounds good', value: 'ok', icon: 'thumbsUp' }],
+    options: [{ label: 'Sounds good', value: 'ok' }],
     next: 'age',
   },
   {

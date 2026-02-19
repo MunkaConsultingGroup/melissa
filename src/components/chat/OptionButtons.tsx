@@ -14,7 +14,7 @@ interface OptionButtonsProps {
 export default function OptionButtons({ options, onSelect, disabled, selectedValue }: OptionButtonsProps) {
   const hasIcons = options.some((opt) => opt.icon);
 
-  // Selected state — show chosen answer as a compact right-aligned chip
+  // Selected state — compact right-aligned answer chip
   if (selectedValue) {
     const selected = options.find((o) => o.value === selectedValue);
     if (!selected) return null;
@@ -35,10 +35,10 @@ export default function OptionButtons({ options, onSelect, disabled, selectedVal
     );
   }
 
-  // Icon card layout
+  // Icon card layout — bigger cards
   if (hasIcons) {
     const cols =
-      options.length === 1 ? 'grid-cols-1 max-w-[200px] mx-auto' :
+      options.length === 1 ? 'grid-cols-1 max-w-[220px] mx-auto' :
       options.length === 3 ? 'grid-cols-3' :
       'grid-cols-2';
 
@@ -57,8 +57,8 @@ export default function OptionButtons({ options, onSelect, disabled, selectedVal
             transition={{ duration: 0.35, delay: 0.08 + i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
             onClick={() => onSelect(opt.value, opt.label)}
             disabled={disabled}
-            className="flex flex-col items-center gap-2 px-4 py-5 rounded-2xl border-2 border-gray-200
-                       text-slate-700 text-[14px] font-medium
+            className="flex flex-col items-center gap-3 px-5 py-6 rounded-2xl border-2 border-gray-200
+                       text-slate-700 text-[15px] font-medium
                        hover:border-slate-700 hover:bg-slate-50
                        active:bg-slate-700 active:text-white active:border-slate-700
                        transition-all duration-200
@@ -74,7 +74,7 @@ export default function OptionButtons({ options, onSelect, disabled, selectedVal
     );
   }
 
-  // Plain pill buttons
+  // Plain pill buttons (no icons)
   return (
     <motion.div
       initial={{ opacity: 0 }}
