@@ -5,6 +5,7 @@ export type InputType = 'auto' | 'options' | 'text' | 'number' | 'email' | 'phon
 export interface ConversationOption {
   label: string;
   value: string;
+  icon?: string;
 }
 
 export interface ConversationStep {

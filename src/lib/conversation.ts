@@ -6,8 +6,8 @@ export const conversationSteps: ConversationStep[] = [
     message: "Hi! I'm Melissa. I help dads like you find affordable life insurance so your family is always protected. This takes about 2 minutes \u2014 no spam, no pressure. Ready?",
     inputType: 'options',
     options: [
-      { label: "Let's do it", value: 'yes' },
-      { label: 'Tell me more first', value: 'more' },
+      { label: "Let's do it", value: 'yes', icon: 'rocket' },
+      { label: 'Tell me more first', value: 'more', icon: 'info' },
     ],
     next: (_answers, value) => (value === 'more' ? 'explainer' : 'age'),
   },
@@ -15,7 +15,7 @@ export const conversationSteps: ConversationStep[] = [
     id: 'explainer',
     message: "I'll ask a few quick questions, then show you estimated rates from top-rated carriers. Most dads are surprised how affordable it is. If you like what you see, a licensed agent can lock in your exact rate. Your info stays private until you say otherwise.",
     inputType: 'options',
-    options: [{ label: 'Sounds good', value: 'ok' }],
+    options: [{ label: 'Sounds good', value: 'ok', icon: 'thumbsUp' }],
     next: 'age',
   },
   {
@@ -34,8 +34,8 @@ export const conversationSteps: ConversationStep[] = [
     message: "What's your gender? (This affects life insurance rates.)",
     inputType: 'options',
     options: [
-      { label: 'Male', value: 'male' },
-      { label: 'Female', value: 'female' },
+      { label: 'Male', value: 'male', icon: 'male' },
+      { label: 'Female', value: 'female', icon: 'female' },
     ],
     next: 'smoker',
   },
@@ -44,9 +44,9 @@ export const conversationSteps: ConversationStep[] = [
     message: 'Do you use any tobacco products?',
     inputType: 'options',
     options: [
-      { label: 'No, never', value: 'never' },
-      { label: 'I quit recently', value: 'former' },
-      { label: 'Yes', value: 'current' },
+      { label: 'No, never', value: 'never', icon: 'noSmoking' },
+      { label: 'I quit recently', value: 'former', icon: 'clock' },
+      { label: 'Yes', value: 'current', icon: 'cigarette' },
     ],
     next: (_answers, value) => (value === 'current' ? 'smoker_note' : 'health'),
   },
@@ -61,10 +61,10 @@ export const conversationSteps: ConversationStep[] = [
     message: 'How would you describe your overall health?',
     inputType: 'options',
     options: [
-      { label: 'Excellent', value: 'preferred_plus' },
-      { label: 'Good', value: 'preferred' },
-      { label: 'Average', value: 'standard_plus' },
-      { label: 'Below average', value: 'standard' },
+      { label: 'Excellent', value: 'preferred_plus', icon: 'heartPlus' },
+      { label: 'Good', value: 'preferred', icon: 'heart' },
+      { label: 'Average', value: 'standard_plus', icon: 'heartHalf' },
+      { label: 'Below average', value: 'standard', icon: 'heartMinus' },
     ],
     next: 'coverage',
   },
@@ -73,11 +73,11 @@ export const conversationSteps: ConversationStep[] = [
     message: 'How much coverage are you looking for?',
     inputType: 'options',
     options: [
-      { label: '$100,000', value: '100000' },
-      { label: '$250,000', value: '250000' },
-      { label: '$500,000', value: '500000' },
-      { label: '$750,000', value: '750000' },
-      { label: '$1,000,000', value: '1000000' },
+      { label: '$100,000', value: '100000', icon: 'shield100' },
+      { label: '$250,000', value: '250000', icon: 'shield250' },
+      { label: '$500,000', value: '500000', icon: 'shield500' },
+      { label: '$750,000', value: '750000', icon: 'shield750' },
+      { label: '$1,000,000', value: '1000000', icon: 'shieldMax' },
     ],
     next: 'term',
   },
@@ -88,12 +88,12 @@ export const conversationSteps: ConversationStep[] = [
     options: (answers: ConversationAnswers): ConversationOption[] => {
       const age = parseInt(answers.age, 10);
       const opts: ConversationOption[] = [
-        { label: '10 years', value: '10' },
-        { label: '15 years', value: '15' },
-        { label: '20 years', value: '20' },
+        { label: '10 years', value: '10', icon: 'cal10' },
+        { label: '15 years', value: '15', icon: 'cal15' },
+        { label: '20 years', value: '20', icon: 'cal20' },
       ];
-      if (age <= 60) opts.push({ label: '25 years', value: '25' });
-      if (age <= 55) opts.push({ label: '30 years', value: '30' });
+      if (age <= 60) opts.push({ label: '25 years', value: '25', icon: 'cal25' });
+      if (age <= 55) opts.push({ label: '30 years', value: '30', icon: 'cal30' });
       return opts;
     },
     next: 'calculating',
@@ -117,8 +117,8 @@ export const conversationSteps: ConversationStep[] = [
     message: "Want to lock in your exact rate? A licensed agent will confirm your price and help you get covered \u2014 so your kids and family are always taken care of. No obligation.",
     inputType: 'options',
     options: [
-      { label: 'Yes, connect me', value: 'yes' },
-      { label: 'Not right now', value: 'no' },
+      { label: 'Yes, connect me', value: 'yes', icon: 'handshake' },
+      { label: 'Not right now', value: 'no', icon: 'wave' },
     ],
     next: (_answers, value) => (value === 'no' ? 'soft_decline' : 'name'),
   },
