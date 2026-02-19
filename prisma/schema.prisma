@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 model Lead {
@@ -33,4 +33,15 @@ model Lead {
   webhookSent    Boolean   @default(false)
   webhookSentAt  DateTime?
   buyerId        String?
+
+  // UTM tracking for ad attribution
+  utmSource      String?
+  utmMedium      String?
+  utmCampaign    String?
+  utmContent     String?
+  utmTerm        String?
+  gclid          String?
+  fbclid         String?
+  referrer       String?
+  landingPage    String?
 }
