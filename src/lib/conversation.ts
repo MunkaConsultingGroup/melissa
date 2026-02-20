@@ -65,9 +65,9 @@ export const conversationSteps: ConversationStep[] = [
         : 'How would you describe their overall health?',
     inputType: 'options',
     options: [
-      { label: 'Excellent', value: 'preferred_plus', icon: 'hearts5' },
-      { label: 'Great', value: 'preferred', icon: 'hearts4' },
-      { label: 'Good', value: 'standard_plus', icon: 'hearts3' },
+      { label: 'Excellent', value: 'preferred_plus', icon: 'hearts4' },
+      { label: 'Great', value: 'preferred', icon: 'hearts3' },
+      { label: 'Good', value: 'standard_plus', icon: 'hearts2' },
       { label: 'Could be better', value: 'standard', icon: 'hearts1' },
     ],
     next: 'coverage',
@@ -123,7 +123,7 @@ export const conversationSteps: ConversationStep[] = [
   },
   {
     id: 'phone',
-    message: "And what's the best phone number for us to contact you?",
+    message: "And what's the best phone number to reach you? We'll send a quick code to verify it.",
     inputType: 'phone',
     validation: (value) => {
       const cleaned = value.replace(/\D/g, '');
@@ -135,7 +135,7 @@ export const conversationSteps: ConversationStep[] = [
   {
     id: 'phone_verify',
     message: (answers) =>
-      `We just sent a verification code to ${answers.phone}. Can you check your texts and enter it below?`,
+      `I just sent a 6-digit code to ${answers.phone}. Please check your texts and enter it below to verify your number.`,
     inputType: 'verify_code',
     next: 'zip',
   },

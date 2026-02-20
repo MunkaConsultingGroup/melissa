@@ -358,19 +358,19 @@ export default function ChatWindow() {
       <ProgressBar current={stepsCompleted} total={TOTAL_STEPS} />
 
       <div className="relative flex-1 overflow-hidden">
-        {/* Top scroll fade */}
-        <div className="pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white to-transparent z-10" />
-
-        <div className="h-full overflow-y-auto px-4 py-6 pb-[env(safe-area-inset-bottom,24px)] flex flex-col justify-start">
+        <div className="h-full overflow-y-auto px-4 pb-[env(safe-area-inset-bottom,24px)] flex flex-col justify-start">
           <div className="w-full max-w-lg mx-auto">
-            {/* Centered Melissa avatar at top */}
-            <div className="flex flex-col items-center mb-6">
-              <img
-                src="/melissa-avatar.jpg"
-                alt="Melissa"
-                className="w-16 h-16 rounded-full object-cover shadow-md"
-              />
-              <span className="mt-2 text-sm font-medium text-gray-700">Melissa</span>
+            {/* Sticky Melissa avatar */}
+            <div className="sticky top-0 z-20 pt-4 pb-3 bg-white">
+              <div className="flex flex-col items-center">
+                <img
+                  src="/melissa-avatar.jpg"
+                  alt="Melissa"
+                  className="w-14 h-14 rounded-full object-cover shadow-md ring-2 ring-white"
+                />
+                <span className="mt-1.5 text-xs font-medium text-gray-500">Melissa</span>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-b from-white to-transparent pointer-events-none" />
             </div>
 
             {messages.map((msg) => (

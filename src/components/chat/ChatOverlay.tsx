@@ -21,14 +21,8 @@ export default function ChatOverlay({ isOpen, onClose }: ChatOverlayProps) {
         >
           <div className="h-full flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <div className="flex items-center gap-2">
-                <img
-                  src="/melissa-avatar.jpg"
-                  alt="Melissa"
-                  className="w-8 h-8 rounded-full object-cover"
-                />
-                <span className="font-medium text-gray-900">Melissa</span>
-              </div>
+              {/* Logo placeholder - swap <span> with <img> when logo file is available */}
+              <span className="text-base font-bold tracking-tight text-slate-800">Dad Insurance</span>
               <button
                 onClick={onClose}
                 className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"

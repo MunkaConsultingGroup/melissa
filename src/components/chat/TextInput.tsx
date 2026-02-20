@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, KeyboardEvent } from 'react';
+import { useState, KeyboardEvent, ChangeEvent } from 'react';
 
 interface TextInputProps {
   type?: 'text' | 'number' | 'email' | 'tel';
@@ -9,8 +9,22 @@ interface TextInputProps {
   disabled?: boolean;
 }
 
+function formatPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, '').slice(0, 10);
+  if (digits.length === 0) return '';
+  if (digits.length <= 3) return `(${digits}`;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
 export default function TextInput({ type = 'text', placeholder = 'Type here...', onSubmit, disabled }: TextInputProps) {
   const [value, setValue] = useState('');
+  const isPhone = type === 'tel';
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    setValue(isPhone ? formatPhone(raw) : raw);
+  };
 
   const handleSubmit = () => {
     if (value.trim()) {
@@ -28,9 +42,10 @@ export default function TextInput({ type = 'text', placeholder = 'Type here...',
   return (
     <div className="flex gap-2 mb-3">
       <input
-        type={type}
+        type={isPhone ? 'tel' : type}
+        inputMode={isPhone ? 'numeric' : undefined}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={disabled}

@@ -2,7 +2,7 @@
 
 import { type ReactElement } from 'react';
 
-// Helper to generate a row of heart SVGs
+// Helper to generate a row of heart SVGs (monochrome outline to match other icons)
 function Hearts({ count }: { count: number }): ReactElement {
   const gap = 2;
   const heartW = 14;
@@ -10,12 +10,11 @@ function Hearts({ count }: { count: number }): ReactElement {
   const offsetX = (48 - totalW) / 2;
 
   return (
-    <svg viewBox="0 0 48 32" fill="none" className="w-12 h-8">
+    <svg viewBox="0 0 48 32" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-12 h-8">
       {Array.from({ length: count }).map((_, i) => (
         <path
           key={i}
           d="M7 3.5C5.5 1.5 3 1 1.5 2.5S0 6 1.5 8L7 13.5 12.5 8C14 6 14 4 12.5 2.5S8.5 1.5 7 3.5z"
-          fill="#ef4444"
           transform={`translate(${offsetX + i * (heartW + gap)}, 5) scale(0.95)`}
         />
       ))}
@@ -64,9 +63,9 @@ const icons: Record<string, ReactElement> = {
   ),
 
   // Health (hearts rating)
-  hearts5: <Hearts count={5} />,
   hearts4: <Hearts count={4} />,
   hearts3: <Hearts count={3} />,
+  hearts2: <Hearts count={2} />,
   hearts1: <Hearts count={1} />,
 
   // Lead intro

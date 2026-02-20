@@ -111,7 +111,7 @@ test.describe('Homepage', () => {
 test.describe('Chat UI', () => {
   test('Melissa avatar is centered at top of chat (not inline with messages)', async ({ page }) => {
     await navigateToStep(page, 'welcome');
-    const avatar = page.locator('img[alt="Melissa"][class*="w-16"]');
+    const avatar = page.locator('img[alt="Melissa"][class*="w-14"]');
     await expect(avatar).toBeVisible();
   });
 
@@ -216,7 +216,7 @@ test.describe('For Whom Step', () => {
     await page.getByPlaceholder('(555) 123-4567').press('Enter');
 
     // Verification
-    await expect(page.getByText('We just sent a verification code')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code')).toBeVisible({ timeout: 10000 });
   });
 });
 
@@ -441,12 +441,12 @@ test.describe('Input Validation', () => {
 test.describe('Phone Verification', () => {
   test('verification UI appears after phone entry', async ({ page }) => {
     await navigateToStep(page, 'verify');
-    await expect(page.getByText('We just sent a verification code')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code')).toBeVisible({ timeout: 10000 });
   });
 
   test('shows code input with correct attributes', async ({ page }) => {
     await navigateToStep(page, 'verify');
-    await expect(page.getByText('We just sent a verification code')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code')).toBeVisible({ timeout: 10000 });
 
     const codeInput = page.getByPlaceholder('Enter code');
     await expect(codeInput).toBeVisible();
@@ -457,7 +457,7 @@ test.describe('Phone Verification', () => {
 
   test('shows verify button, resend code, and change number options', async ({ page }) => {
     await navigateToStep(page, 'verify');
-    await expect(page.getByText('We just sent a verification code')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code')).toBeVisible({ timeout: 10000 });
 
     await expect(page.getByRole('button', { name: 'Verify' })).toBeVisible();
     await expect(page.getByText('Resend code')).toBeVisible();
@@ -466,7 +466,7 @@ test.describe('Phone Verification', () => {
 
   test('verify button is disabled with short code', async ({ page }) => {
     await navigateToStep(page, 'verify');
-    await expect(page.getByText('We just sent a verification code')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code')).toBeVisible({ timeout: 10000 });
 
     await page.getByPlaceholder('Enter code').fill('12');
     await expect(page.getByRole('button', { name: 'Verify' })).toBeDisabled();
@@ -474,7 +474,7 @@ test.describe('Phone Verification', () => {
 
   test('verify button is enabled with 4+ digit code', async ({ page }) => {
     await navigateToStep(page, 'verify');
-    await expect(page.getByText('We just sent a verification code')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code')).toBeVisible({ timeout: 10000 });
 
     await page.getByPlaceholder('Enter code').fill('1234');
     await expect(page.getByRole('button', { name: 'Verify' })).toBeEnabled();
@@ -482,7 +482,7 @@ test.describe('Phone Verification', () => {
 
   test('code input only accepts digits', async ({ page }) => {
     await navigateToStep(page, 'verify');
-    await expect(page.getByText('We just sent a verification code')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code')).toBeVisible({ timeout: 10000 });
 
     const codeInput = page.getByPlaceholder('Enter code');
     await codeInput.fill('abc123def');
@@ -491,7 +491,7 @@ test.describe('Phone Verification', () => {
 
   test('"Use a different number" re-shows phone input', async ({ page }) => {
     await navigateToStep(page, 'verify');
-    await expect(page.getByText('We just sent a verification code')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code')).toBeVisible({ timeout: 10000 });
 
     await page.getByText('Use a different number').click();
 
@@ -556,7 +556,7 @@ test.describe('Full Flow Integration', () => {
     await page.getByPlaceholder('(555) 123-4567').press('Enter');
 
     // Verification
-    await expect(page.getByText('We just sent a verification code to 5559991234')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('I just sent a 6-digit code to (555) 999-1234')).toBeVisible({ timeout: 10000 });
     await expect(page.getByPlaceholder('Enter code')).toBeVisible();
   });
 
