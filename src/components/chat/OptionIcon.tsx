@@ -6,16 +6,16 @@ import { type ReactElement } from 'react';
 function Hearts({ count }: { count: number }): ReactElement {
   const gap = 2;
   const heartW = 14;
-  const totalW = count * heartW + (count - 1) * gap;
-  const offsetX = (48 - totalW) / 2;
+  const pad = 2;
+  const totalW = count * heartW + (count - 1) * gap + pad * 2;
 
   return (
-    <svg viewBox="0 0 48 32" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-12 h-8">
+    <svg viewBox={`0 0 ${totalW} 22`} fill="none" stroke="currentColor" strokeWidth="1.2" className="w-12 h-8">
       {Array.from({ length: count }).map((_, i) => (
         <path
           key={i}
           d="M7 3.5C5.5 1.5 3 1 1.5 2.5S0 6 1.5 8L7 13.5 12.5 8C14 6 14 4 12.5 2.5S8.5 1.5 7 3.5z"
-          transform={`translate(${offsetX + i * (heartW + gap)}, 5) scale(0.95)`}
+          transform={`translate(${pad + i * (heartW + gap)}, 3) scale(0.95)`}
         />
       ))}
     </svg>
