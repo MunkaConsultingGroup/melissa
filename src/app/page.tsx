@@ -1,10 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import ChatOverlay from '@/components/chat/ChatOverlay';
+import { useState, useCallback, lazy, Suspense } from 'react';
+
+const ChatOverlay = lazy(() => import('@/components/chat/ChatOverlay'));
 
 export default function Home() {
   const [chatOpen, setChatOpen] = useState(false);
+  const [preloaded, setPreloaded] = useState(false);
+
+  const preloadChat = useCallback(() => {
+    if (!preloaded) {
+      import('@/components/chat/ChatOverlay');
+      setPreloaded(true);
+    }
+  }, [preloaded]);
 
   return (
     <main className="min-h-svh bg-white">
@@ -25,6 +34,8 @@ export default function Home() {
         </p>
         <button
           onClick={() => setChatOpen(true)}
+          onMouseEnter={preloadChat}
+          onTouchStart={preloadChat}
           className="w-full max-w-xs px-8 py-4 bg-slate-700 text-white rounded-full text-lg font-medium
                      hover:bg-slate-800 active:bg-slate-900 transition-colors duration-200
                      shadow-lg shadow-slate-700/20"
@@ -33,7 +44,11 @@ export default function Home() {
         </button>
       </section>
 
-      <ChatOverlay isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+      {chatOpen && (
+        <Suspense fallback={<div className="fixed inset-0 z-50 bg-white" />}>
+          <ChatOverlay isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+        </Suspense>
+      )}
     </main>
   );
 }
