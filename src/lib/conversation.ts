@@ -83,6 +83,19 @@ export const conversationSteps: ConversationStep[] = [
       { label: '$1,000,000', value: '1000000' },
       { label: '$1,000,000+', value: '1500000' },
     ],
+    next: 'income',
+  },
+  {
+    id: 'income',
+    message: "What's your household income?",
+    inputType: 'options',
+    options: [
+      { label: 'Under $30K', value: 'under_30k' },
+      { label: '$30K - $50K', value: '30k_50k' },
+      { label: '$50K - $75K', value: '50k_75k' },
+      { label: '$75K - $100K', value: '75k_100k' },
+      { label: 'Over $100K', value: 'over_100k' },
+    ],
     next: 'timing',
   },
   {
