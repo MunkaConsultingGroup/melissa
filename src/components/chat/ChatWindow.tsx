@@ -249,8 +249,17 @@ export default function ChatWindow() {
         }),
       });
 
-      // Fire Meta Pixel events
+      // Fire Meta Pixel events with Advanced Matching for high EMQ
       if (typeof window.fbq === 'function') {
+        // Re-init pixel with user data so Meta can match to Facebook profiles
+        window.fbq('init', '897943992763325', {
+          em: currentAnswers.email?.toLowerCase().trim(),
+          ph: currentAnswers.phone?.replace(/\D/g, ''),
+          fn: currentAnswers.name?.toLowerCase().trim(),
+          zp: currentAnswers.zip?.trim(),
+          ge: currentAnswers.gender === 'male' ? 'm' : 'f',
+        });
+
         // Always fire Lead event for every submission
         window.fbq('track', 'Lead');
 
